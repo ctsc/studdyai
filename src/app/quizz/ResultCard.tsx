@@ -22,9 +22,6 @@ const ResultCard = (props: Props) => {
         "border-red-500": !isCorrect
     })
 
-
-
-
     return (
         <div className={cn(
             borderClasses,
