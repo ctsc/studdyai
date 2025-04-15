@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import ProgressBar from "@/components/progressBar";
 import { ChevronLeft, X} from "lucide-react";
 import ResultCard from "./ResultCard";
+import QuizzSubmission from "./QuizzSubmission";
 
 const questions = [
   {
@@ -43,16 +44,20 @@ export default function Home() {
   const [score, setScore] = useState<number>(0);
   const[selectedAnswer, setSelectedAnswer] =
   useState<number | null>(null);
-  const [isCorrect, setIsCorrect] = useState<boolean| null>
-  (null);
+  const [isCorrect, setIsCorrect] = useState<boolean| null> (null);
+  const [submitted, setSubmitted] = useState<boolean>(false);
 
   const handleNext = () => {
     if (!started) {    
       setStarted(true);
       return;
       }
-    if (currentQuestion < questions.length -1) {
+
+    if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
+    } else {
+        setSubmitted(true);
+        return;
     }
 
     setSelectedAnswer(null);
@@ -68,8 +73,16 @@ export default function Home() {
     setIsCorrect(isCurrentCorrect);
   }
 
+  const scorePercentage: number = Math.round((score / questions.length) * 100)
 
-
+  if (submitted) {
+    return (
+        <QuizzSubmission
+            score={score}
+            scorePercentage={scorePercentage}
+            totalQuestions={questions.length}/>
+    )
+  }
 
   return (
     <div className="flex flex-col flex-1">
@@ -97,10 +110,11 @@ export default function Home() {
                 {
                   questions[currentQuestion].answers.map
                   (answer=> {
+                    const variant = selectedAnswer === answer.id ? (answer.isCorrect ? "neoSuccess" : "neoDanger") : "neoOutline";
                     return(
                       <Button key={answer.id} variant=
-                      {'secondary'} onClick={()=> handleAnswer
-                      (answer)}>{answer.answertext}</Button>
+                      {variant} size="xl" onClick={()=> handleAnswer
+                      (answer)}><p className="whitespace-normal">{answer.answertext}</p></Button>
                     )})}
               </div></div>
       )}    
@@ -109,7 +123,7 @@ export default function Home() {
         <ResultCard isCorrect={isCorrect} correctAnswer=
         {questions[currentQuestion].answers.find(answer => 
           answer.isCorrect === true)?.answertext} />
-        <Button onClick={handleNext}>{!started ? 'Start' : 'Next'}</Button>
+        <Button variant="neo" size="lg" onClick={handleNext}>{!started ? 'Start' : (currentQuestion === questions.length - 1) ? 'Submit' : 'Next'}</Button>
       </footer>
     </div>
   )}
