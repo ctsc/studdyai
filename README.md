@@ -30,7 +30,8 @@ pnpm dev
 # or
 bun dev
 ```
-also update tailwind and 
+also update tailwind with npm install tailwind-merge
+
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
