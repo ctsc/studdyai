@@ -1,11 +1,11 @@
+// drizzle.config.ts
 import { defineConfig } from "drizzle-kit";
-import "dotenv/config";
 
 export default defineConfig({
-  schema: ["./src/db/schema.ts"],
+  schema: "./src/db/schema.ts",
   out: "./drizzle",
   driver: "pg",
   dbCredentials: {
-    connectionString: process.env.DATABASE_URL as string,
+    connectionString: "postgresql://postgres.uxjxdddvtofnegseprho:studybuddyai@aws-0-us-east-1.pooler.supabase.com:6543/postgres",
   },
 });
